@@ -1,4 +1,4 @@
-ip: 192.168.0.104
+ip: 192.168.0.106
 server:
   port: 8771
   address: ${ip}
