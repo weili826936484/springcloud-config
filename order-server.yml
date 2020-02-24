@@ -1,0 +1,55 @@
+ip: 192.168.0.107
+server:
+  port: 8781
+  address: ${ip}
+spring:
+  application:
+    name: order-server
+  cloud:
+    config:
+      discovery:
+        service-id: CONFIG-SERVER
+        enabled: true
+      #类似applicationName-profile.yml 不推荐这种方式
+      profile: dev
+      #分支 ***
+      label: master
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      shutdown-timeout: 1000
+  zipkin:
+    base-url: http://${ip}:9411
+  sleuth:
+    sampler:
+      probability: 1
+PRODUCT-SERVER:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
+    ReadTimeout: 4000
+#设置feign的响应时间
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 4000
+        readTimeout: 4000
+  hystrix:
+    enabled: true
+
+#设置hystrix超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+#配置hystrix页面
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
